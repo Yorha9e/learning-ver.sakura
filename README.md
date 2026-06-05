@@ -1,4 +1,4 @@
-# Learn Anything
+# learning-ver.sakura
 
 AI-powered recursive learning system — turns your AI coding assistant into an interactive tutor using the Socratic method and TDD-style exercises.
 
@@ -10,25 +10,23 @@ Generate **project-aware** skill and command files for **30+ AI tools** (Claude 
 - **30+ AI Tools** — Supports Claude Code, Cursor, Gemini CLI, Codex, GitHub Copilot, Windsurf, and many more
 - **5 Learning Workflows** — Topic, Explain, Practice, Review, Status
 - **Localized** — English and Chinese (zh-CN) support
+- **Japanese UI Theme** — Sakura-themed terminal interface
 
 ## Quick Start
 
 ```bash
-# Initialize in your project (auto-detects tech stack)
-npx learn-anything-cli init
+# Initialize globally (default, skills installed to ~/.claude/)
+npx learning-ver.sakura init --tools claude
 
-# Specify tools directly
-npx learn-anything-cli init --tools claude
-
-# Skip project analysis (generate generic skills)
-npx learn-anything-cli init --no-analysis
+# Initialize locally (skills installed to project directory)
+npx learning-ver.sakura init --local --tools claude
 
 # Chinese terminal output
-npx learn-anything-cli init --lang zh-CN
+npx learning-ver.sakura init --lang zh-CN
 
 # Or install globally
-npm install -g learn-anything-cli
-learn-anything init
+npm install -g learning-ver.sakura
+learning-sakura init
 ```
 
 ## What Gets Detected
@@ -159,13 +157,13 @@ Each AI tool gets tool-appropriate file formats (YAML frontmatter for Claude, TO
 ## CLI Options
 
 ```
-learn-anything init [path]         Initialize skills in target directory
+learning-sakura init [path]        Initialize skills (default: global)
   --tools <tools>                  Specify AI tools (comma-separated, or "all"/"none")
-  --no-analysis                    Skip project analysis, generate generic skills
+  --local                          Install skills locally (in project directory)
   --force                          Skip confirmation prompts
   --lang <locale>                  Display language: zh-CN or en
 
-learn-anything update [path]       Update skill files to latest version
+learning-sakura update [path]      Update skill files to latest version
   --force                          Skip confirmation prompts
   --lang <locale>                  Display language: zh-CN or en
 ```

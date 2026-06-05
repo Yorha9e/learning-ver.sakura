@@ -31,8 +31,8 @@ program
   .option('--tools <tools>', m.cli.toolsOptionDescription(availableToolIds.join(', ')))
   .option('--force', m.cli.forceOption)
   .option('--lang <locale>', m.cli.langOption)
-  .option('--global', 'Install skills globally (in home directory)')
-  .action(async (targetPath = '.', options?: { tools?: string; force?: boolean; lang?: string; global?: boolean }) => {
+  .option('--local', 'Install skills locally (in project directory)')
+  .action(async (targetPath = '.', options?: { tools?: string; force?: boolean; lang?: string; local?: boolean }) => {
     const cliLocale = resolveLocale(options?.lang);
     const mc = cliLocale !== earlyLocale ? getMessages(cliLocale).cli : m.cli;
     try {
@@ -58,7 +58,7 @@ program
         tools: options?.tools,
         force: options?.force,
         locale: cliLocale,
-        global: options?.global,
+        global: !options?.local,  // default global, --local to install in project
       });
       await initCommand.execute(targetPath);
     } catch (error) {

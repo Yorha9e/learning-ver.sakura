@@ -39,18 +39,10 @@ Use this context to:
 
 Before generating content, check if official documentation is cached locally.
 
-### Read Config
-
-First, read the config file to get the docs directory path:
-
-1. Use the Read tool to read \`./.learn/config.yaml\`
-2. Extract the \`docsDir\` value (default: \`docs\`)
-3. The full docs path is \`./.learn/<docsDir>/\`
-
 ### Check Local Cache
 
 1. Determine the language from the topic name or project context
-2. Check if \`./.learn/<docsDir>/<language>/summary.md\` exists
+2. Check if \`./.learn/docs/<language>/summary.md\` exists
 3. **If exists** → Read it and use as context for generating accurate content
 4. **If not exists** → Fetch from official docs (see below)
 
@@ -71,15 +63,15 @@ Use WebFetch directly on these URLs (do NOT use search engines):
 When documentation is not cached:
 
 1. **Fetch TOC**: Use WebFetch to read the documentation index page
-2. **Save TOC**: Write the table of contents to \`./.learn/<docsDir>/<language>/toc.md\`
+2. **Save TOC**: Write the table of contents to \`./.learn/docs/<language>/toc.md\`
 3. **Spawn Sub-Agents**: For each major chapter in the TOC:
    - Use the Agent tool to spawn a sub-agent
    - Each sub-agent reads one chapter section via WebFetch
-   - Sub-agent writes a summary to \`./.learn/<docsDir>/<language>/chapters/<chapter-slug>.md\`
+   - Sub-agent writes a summary to \`./.learn/docs/<language>/chapters/<chapter-slug>.md\`
    - Each summary should be 200-500 words, covering key concepts and code examples
 4. **Merge**: After all sub-agents complete:
-   - Read all chapter summaries from \`./.learn/<docsDir>/<language>/chapters/\`
-   - Concatenate into \`./.learn/<docsDir>/<language>/summary.md\`
+   - Read all chapter summaries from \`./.learn/docs/<language>/chapters/\`
+   - Concatenate into \`./.learn/docs/<language>/summary.md\`
    - Add a header with the language name and fetch date
 
 ### Sub-Agent Prompt Template
@@ -95,7 +87,7 @@ Write a concise summary (200-500 words) covering:
 3. Common patterns and best practices
 4. Gotchas and edge cases
 
-Save the summary to: ./.learn/<docsDir>/<language>/chapters/<chapter-slug>.md
+Save the summary to: ./.learn/docs/<language>/chapters/<chapter-slug>.md
 \`\`\`
 
 ---

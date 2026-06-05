@@ -56,28 +56,12 @@ export class InitCommand {
     // Ensure target directory exists
     await FileSystemUtils.ensureDir(basePath);
 
-    // Create .learn/ directory
-    const learnDir = path.join(basePath, LEARN_DIR);
-    await FileSystemUtils.ensureDir(path.join(learnDir, 'topics'));
-
-    // Ask for docs cache directory (interactive mode only, not for global)
-    let docsDir = path.join(learnDir, 'docs');
-    if (isInteractive() && !this.isUpdate && !this.isGlobal) {
-      const { input } = await import('@inquirer/prompts');
-      const defaultDocsDir = path.join(learnDir, 'docs');
-      const customDir = await input({
-        message: 'Documentation cache directory (for storing fetched docs):',
-        default: defaultDocsDir,
-      });
-      docsDir = customDir || defaultDocsDir;
+    // Create .learn/ directory (project-level only, not for global install)
+    if (!this.isGlobal) {
+      const learnDir = path.join(basePath, LEARN_DIR);
+      await FileSystemUtils.ensureDir(path.join(learnDir, 'topics'));
+      await FileSystemUtils.ensureDir(path.join(learnDir, 'docs'));
     }
-    await FileSystemUtils.ensureDir(docsDir);
-
-    // Save config
-    const configPath = path.join(learnDir, 'config.yaml');
-    const { stringify } = await import('yaml');
-    const config = { docsDir: path.relative(learnDir, docsDir) };
-    await FileSystemUtils.writeFile(configPath, stringify(config));
 
     console.log('');
 

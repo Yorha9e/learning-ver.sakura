@@ -38,7 +38,7 @@ Before creating exercises, scan the project:
 Check if official documentation is cached locally:
 
 1. Determine the language from the topic or project context
-2. Check if \`./.learn/<docsDir>/<language>/summary.md\` exists
+2. Check if \`./.learn/docs/<language>/summary.md\` exists
 3. **If exists** → Read it to ensure accurate exercise content
 4. **If not exists** → You may fetch key pages using WebFetch:
    - JavaScript: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide

@@ -32,21 +32,29 @@ Before explaining, scan the project to understand the environment:
 
 ---
 
-## Step 0.5: Load Documentation Context
+## Step 0.5: Mandatory Documentation Verification
 
-Check if official documentation is cached locally:
+⚠️ **CRITICAL** — Before explaining ANY concept, you MUST verify against the mandatory reference documentation.
 
-1. Determine the language from the topic or project context
-2. Check if \`./.learn/docs/<language>/summary.md\` exists
-3. **If exists** → Read it to ensure accurate explanations
-4. **If not exists** → You may fetch key pages using WebFetch:
-   - JavaScript: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide
-   - TypeScript: https://www.typescriptlang.org/docs/handbook/intro.html
-   - React: https://react.dev/learn
-   - Vue: https://vuejs.org/guide/introduction.html
-   - Python: https://docs.python.org/3/tutorial/index.html
-   - Rust: https://doc.rust-lang.org/book/
-   - Go: https://go.dev/doc/
+### Mandatory Reference Documentation
+
+{{DOC_URLS}}
+
+### Documentation Cache Location
+
+\`{{DOCS_PATH}}\`
+
+### Verification Workflow (MUST follow before every explanation)
+
+1. **Check local cache**: Check if \`{{DOCS_PATH}}/<language>/summary.md\` exists
+2. **If cached** → Read it. Use as ground truth.
+3. **If NOT cached** → Use WebFetch to download the relevant documentation URL above.
+   - Fetch and extract key sections relevant to the concept being explained
+   - Write summary to \`{{DOCS_PATH}}/<language>/summary.md\`
+4. **Cross-reference your explanation**:
+   - Terminology must match official docs
+   - Code examples must follow official patterns
+   - If your explanation conflicts with official docs → **defer to official docs**
 
 ---
 

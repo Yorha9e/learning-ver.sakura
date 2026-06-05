@@ -6,7 +6,7 @@ export interface DocUrlEntry {
   base: string;
 }
 
-export const DOC_URLS: Record<string, DocUrlEntry> = {
+export const DEFAULT_DOC_URLS: Record<string, DocUrlEntry> = {
   javascript: {
     name: 'JavaScript',
     toc: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide',

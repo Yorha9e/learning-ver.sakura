@@ -5,7 +5,7 @@ import { createRequire } from 'module';
 import boxen from 'boxen';
 import ora from 'ora';
 import { FileSystemUtils } from '../utils/file-system.js';
-import { AI_TOOLS, AIToolOption, LEARN_DIR } from './config.js';
+import { AI_TOOLS, AIToolOption, LEARN_DIR, DEFAULT_DOC_URLS } from './config.js';
 import { isInteractive } from '../utils/interactive.js';
 import {
   generateCommands,
@@ -15,9 +15,12 @@ import {
   getSkillTemplates,
   getCommandContents,
   generateSkillContent,
+  buildDocUrlsSection,
+  buildDocsPathSection,
 } from './shared/index.js';
 import type { SupportedLocale } from '../i18n/types.js';
 import { getMessages } from '../i18n/index.js';
+import { promptDocStoragePath } from './doc-selection.js';
 
 const require = createRequire(import.meta.url);
 const { version: VERSION } = require('../../package.json');
@@ -56,12 +59,10 @@ export class InitCommand {
     // Ensure target directory exists
     await FileSystemUtils.ensureDir(basePath);
 
-    // Create .learn/ directory (project-level only, not for global install)
-    if (!this.isGlobal) {
-      const learnDir = path.join(basePath, LEARN_DIR);
-      await FileSystemUtils.ensureDir(path.join(learnDir, 'topics'));
-      await FileSystemUtils.ensureDir(path.join(learnDir, 'docs'));
-    }
+    // .learn/ is always created in the project directory (resolvedPath), not global
+    const learnDir = path.join(resolvedPath, LEARN_DIR);
+    await FileSystemUtils.ensureDir(path.join(learnDir, 'topics'));
+    await FileSystemUtils.ensureDir(path.join(learnDir, 'docs'));
 
     console.log('');
 
@@ -106,13 +107,18 @@ export class InitCommand {
       return;
     }
 
+    // Collect doc storage path — all DEFAULT_DOC_URLS are baked into skills
+    const storagePath = await promptDocStoragePath(this.locale);
+    console.log(chalk.dim(`  📚 Doc storage → ${storagePath}`));
+    console.log('');
+
     // Generate skill files for each tool
     const spinner2 = ora({ text: sakura('🌸') + ' Generating skills...', spinner: 'dots', color: 'magenta' }).start();
     const toolResults: { name: string; skillsDir: string; skillCount: number; commandCount: number }[] = [];
 
     for (const tool of selectedTools) {
       if (!tool.skillsDir) continue;
-      const skillCount = await this.generateSkillsForTool(basePath, tool);
+      const skillCount = await this.generateSkillsForTool(basePath, tool, storagePath);
       const commandCount = await this.generateCommandsForTool(basePath, tool);
       toolResults.push({ name: tool.name, skillsDir: tool.skillsDir, skillCount, commandCount });
     }
@@ -131,9 +137,9 @@ export class InitCommand {
     const summaryLines: string[] = [];
     if (this.isGlobal) {
       summaryLines.push(sakura('  🌸 ') + chalk.bold('Global install') + chalk.dim(` → ${basePath}`));
-    } else {
-      summaryLines.push(sakura('  🌸 ') + chalk.bold('Learning data') + chalk.dim(` → ${LEARN_DIR}/`));
     }
+    summaryLines.push(sakura('  🌸 ') + chalk.bold('Learning data') + chalk.dim(` → ${LEARN_DIR}/`));
+    summaryLines.push(sakura('  📚 ') + chalk.bold('Doc storage') + chalk.dim(` → ${storagePath}`));
     for (const result of toolResults) {
       summaryLines.push(pink('  ⛩️ ') + chalk.bold(result.name) + chalk.dim(` → ${result.skillsDir}/`));
     }
@@ -200,9 +206,12 @@ export class InitCommand {
 
   private async generateSkillsForTool(
     resolvedPath: string,
-    tool: AIToolOption
+    tool: AIToolOption,
+    storagePath: string
   ): Promise<number> {
     const skillTemplates = getSkillTemplates();
+    const docUrlsSection = buildDocUrlsSection(DEFAULT_DOC_URLS);
+    const docsPathSection = buildDocsPathSection(storagePath);
 
     for (const entry of skillTemplates) {
       const skillDir = path.join(
@@ -212,7 +221,11 @@ export class InitCommand {
         entry.dirName
       );
       const skillFile = path.join(skillDir, 'SKILL.md');
-      const content = generateSkillContent(entry.template, VERSION);
+      const content = generateSkillContent(entry.template, VERSION, (instructions) => {
+        return instructions
+          .replace(/\{\{DOC_URLS\}\}/g, docUrlsSection)
+          .replace(/\{\{DOCS_PATH\}\}/g, docsPathSection);
+      });
       await FileSystemUtils.writeFile(skillFile, content);
     }
     return skillTemplates.length;

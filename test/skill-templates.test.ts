@@ -1,4 +1,8 @@
 import { describe, it, expect } from 'vitest';
+
+/** Normalize path separators to forward slashes for cross-platform compatibility */
+const normalizePath = (p: string) => p.replace(/\\/g, '/');
+
 import {
   getLearnTopicSkillTemplate,
   getLearnExplainSkillTemplate,
@@ -97,7 +101,7 @@ describe('Command Generation', () => {
     expect(cmds).toHaveLength(5);
 
     for (const cmd of cmds) {
-      expect(cmd.path).toContain('.claude/commands/learn/');
+      expect(normalizePath(cmd.path)).toContain('.claude/commands/learn/');
       expect(cmd.path).toMatch(/\.md$/);
       expect(cmd.fileContent).toContain('---');
       expect(cmd.fileContent).toContain('category: Learning');
@@ -110,7 +114,7 @@ describe('Command Generation', () => {
 
     const topicContent = getCommandContents()[0];
     const cmd = generateCommand(topicContent, adapter!);
-    expect(cmd.path).toContain('.cursor/commands/learn-anything-topic.md');
+    expect(normalizePath(cmd.path)).toContain('.cursor/commands/learn-anything-topic.md');
     expect(cmd.fileContent).toContain('/learn-anything-topic');
   });
 
@@ -120,7 +124,7 @@ describe('Command Generation', () => {
 
     const topicContent = getCommandContents()[0];
     const cmd = generateCommand(topicContent, adapter!);
-    expect(cmd.path).toContain('.codex/prompts/learn-anything-topic.md');
+    expect(normalizePath(cmd.path)).toContain('.codex/prompts/learn-anything-topic.md');
   });
 
   it('should generate Gemini command files in TOML format', () => {
@@ -129,7 +133,7 @@ describe('Command Generation', () => {
 
     const topicContent = getCommandContents()[0];
     const cmd = generateCommand(topicContent, adapter!);
-    expect(cmd.path).toContain('.gemini/commands/learn/');
+    expect(normalizePath(cmd.path)).toContain('.gemini/commands/learn/');
     expect(cmd.path).toMatch(/\.toml$/);
     expect(cmd.fileContent).toContain('description =');
     expect(cmd.fileContent).toContain('prompt = """');

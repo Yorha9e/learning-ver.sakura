@@ -35,60 +35,34 @@ Use this context to:
 
 ---
 
-## Step 0.5: Load or Fetch Documentation
+## Step 0.5: Mandatory Documentation Verification
 
-Before generating content, check if official documentation is cached locally.
+⚠️ **CRITICAL** — Before generating ANY teaching content, you MUST verify against the mandatory reference documentation.
 
-### Check Local Cache
+### Mandatory Reference Documentation
 
-1. Determine the language from the topic name or project context
-2. Check if \`./.learn/docs/<language>/summary.md\` exists
-3. **If exists** → Read it and use as context for generating accurate content
-4. **If not exists** → Fetch from official docs (see below)
+The following official documentation sources are MANDATORY references. All teaching content must be cross-checked against these docs for accuracy.
 
-### Documentation URLs
+{{DOC_URLS}}
 
-Use WebFetch directly on these URLs (do NOT use search engines):
+### Documentation Cache Location
 
-- **JavaScript**: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide
-- **TypeScript**: https://www.typescriptlang.org/docs/handbook/intro.html
-- **React**: https://react.dev/learn
-- **Vue**: https://vuejs.org/guide/introduction.html
-- **Python**: https://docs.python.org/3/tutorial/index.html
-- **Rust**: https://doc.rust-lang.org/book/
-- **Go**: https://go.dev/doc/
+Downloaded documentation is stored at: \`{{DOCS_PATH}}\`
 
-### Fetch Process (Progressive Disclosure)
+### Verification Workflow (MUST follow before every teaching session)
 
-When documentation is not cached:
-
-1. **Fetch TOC**: Use WebFetch to read the documentation index page
-2. **Save TOC**: Write the table of contents to \`./.learn/docs/<language>/toc.md\`
-3. **Spawn Sub-Agents**: For each major chapter in the TOC:
-   - Use the Agent tool to spawn a sub-agent
-   - Each sub-agent reads one chapter section via WebFetch
-   - Sub-agent writes a summary to \`./.learn/docs/<language>/chapters/<chapter-slug>.md\`
-   - Each summary should be 200-500 words, covering key concepts and code examples
-4. **Merge**: After all sub-agents complete:
-   - Read all chapter summaries from \`./.learn/docs/<language>/chapters/\`
-   - Concatenate into \`./.learn/docs/<language>/summary.md\`
-   - Add a header with the language name and fetch date
-
-### Sub-Agent Prompt Template
-
-When spawning sub-agents for documentation chapters, use this prompt:
-
-\`\`\`
-Read and summarize this documentation page: <URL>
-
-Write a concise summary (200-500 words) covering:
-1. Key concepts and terminology
-2. Important code examples (keep them short)
-3. Common patterns and best practices
-4. Gotchas and edge cases
-
-Save the summary to: ./.learn/docs/<language>/chapters/<chapter-slug>.md
-\`\`\`
+1. **Check local cache**: Check if \`{{DOCS_PATH}}/<language>/summary.md\` exists
+2. **If cached** → Read it. Use it as the ground truth for all explanations, examples, and code snippets.
+3. **If NOT cached** → Use WebFetch to download the relevant documentation URL listed above.
+   - Fetch the documentation index page
+   - Extract key sections relevant to the current topic
+   - Write a comprehensive summary to \`{{DOCS_PATH}}/<language>/summary.md\`
+   - Include: key concepts, API references, code examples, best practices, gotchas
+4. **Cross-reference**: When generating knowledge maps, explanations, or code examples, always verify:
+   - Terminology matches official documentation
+   - Code examples follow official patterns and conventions
+   - API usage is accurate per the official docs
+   - If your explanation conflicts with the official docs, **defer to the official docs**
 
 ---
 

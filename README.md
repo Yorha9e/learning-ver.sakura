@@ -1,4 +1,4 @@
-# 🌸 learning-ver.sakura
+# 🌸 Learning-Ver.Sakura
 
 > **AI-Powered Recursive Learning — Socratic Method × TDD × Project-Aware**
 

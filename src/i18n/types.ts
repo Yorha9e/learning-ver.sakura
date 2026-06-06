@@ -1,4 +1,4 @@
-export type SupportedLocale = 'zh-CN' | 'en';
+export type SupportedLocale = 'zh-CN' | 'en' | 'ja';
 
 export interface CLIMessages {
   programDescription: string;

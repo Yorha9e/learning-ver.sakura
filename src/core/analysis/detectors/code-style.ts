@@ -2,8 +2,8 @@ import * as fs from 'fs';
 import path from 'path';
 import type { CodeStyleInfo } from '../types.js';
 
-const SAMPLE_SIZE = 20;       // max files to sample
-const LINES_TO_CHECK = 50;    // lines per file to analyze
+const SAMPLE_SIZE = 20; // max files to sample
+const LINES_TO_CHECK = 50; // lines per file to analyze
 
 async function collectSourceFiles(rootPath: string): Promise<string[]> {
   const srcDir = path.join(rootPath, 'src');
@@ -21,7 +21,8 @@ async function collectSourceFiles(rootPath: string): Promise<string[]> {
     }
     for (const entry of entries) {
       if (files.length >= SAMPLE_SIZE) break;
-      if (entry.name.startsWith('.') || entry.name === 'node_modules' || entry.name === 'dist') continue;
+      if (entry.name.startsWith('.') || entry.name === 'node_modules' || entry.name === 'dist')
+        continue;
       const full = path.join(dir, entry.name);
       if (entry.isDirectory()) {
         await walk(full);
@@ -92,7 +93,8 @@ function detectSemicolons(lines: string[]): boolean | null {
 
   for (const line of lines) {
     const trimmed = line.trim();
-    if (!trimmed || trimmed.startsWith('//') || trimmed.startsWith('/*') || trimmed.startsWith('*')) continue;
+    if (!trimmed || trimmed.startsWith('//') || trimmed.startsWith('/*') || trimmed.startsWith('*'))
+      continue;
     // only check lines that look like statements
     if (trimmed.endsWith(';') && !trimmed.endsWith(';;')) {
       withSemi++;
@@ -139,7 +141,14 @@ export async function detectCodeStyle(rootPath: string): Promise<CodeStyleInfo> 
   const files = await collectSourceFiles(rootPath);
 
   if (files.length === 0) {
-    return { indent: null, indentSize: null, quotes: null, namingConvention: null, moduleSystem: null, semicolons: null };
+    return {
+      indent: null,
+      indentSize: null,
+      quotes: null,
+      namingConvention: null,
+      moduleSystem: null,
+      semicolons: null,
+    };
   }
 
   const allLines: string[] = [];

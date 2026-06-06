@@ -1,10 +1,14 @@
 import type { SkillTemplate, CommandTemplate } from '../types.js';
 
 const SKILL_NAME = 'learn-anything-topic';
-const SKILL_DESCRIPTION = 'Initialize or load a learning topic. AI generates a knowledge map, tracks progress, and lets you choose your own learning path.';
+const SKILL_DESCRIPTION =
+  'Initialize or load a learning topic. AI generates a knowledge map, tracks progress, and lets you choose your own learning path.';
 
 const INSTRUCTIONS = `Always respond in the same language the user uses.
 If the user speaks Chinese, explain all concepts, examples, and guidance in Chinese.
+
+> 🔧 **Context7 MCP Required for Verified Docs**
+> This skill uses Context7 MCP to fetch official documentation. If you haven't set it up yet, run \`npx ctx7 setup\` (or visit https://github.com/upstash/context7 for manual setup). If Context7 is unavailable, this skill will fall back to general knowledge with an accuracy warning.
 
 ---
 
@@ -53,16 +57,22 @@ Downloaded documentation is stored at: \`{{DOCS_PATH}}\`
 
 1. **Check local cache**: Check if \`{{DOCS_PATH}}/<language>/summary.md\` exists
 2. **If cached** → Read it. Use it as the ground truth for all explanations, examples, and code snippets.
-3. **If NOT cached** → Use WebFetch to download the relevant documentation URL listed above.
-   - Fetch the documentation index page
-   - Extract key sections relevant to the current topic
+3. **If NOT cached** → Use Context7 MCP's \`get-library-docs\` tool to fetch official documentation:
+   - Pass the library ID for the topic (e.g., \`/mdn/content\` for JavaScript, \`/reactjs/react.dev\` for React)
+   - Optionally pass a \`topic\` parameter to focus on the concept (e.g., \`topic: "closures"\`)
    - Write a comprehensive summary to \`{{DOCS_PATH}}/<language>/summary.md\`
    - Include: key concepts, API references, code examples, best practices, gotchas
-4. **Cross-reference**: When generating knowledge maps, explanations, or code examples, always verify:
+4. **If Context7 MCP is NOT available** (tool not found in your available tools):
+   - 🔧 **Tell the user**: "Context7 MCP is not configured. To enable verified documentation, please run: \`npx ctx7 setup\`"
+   - Proceed with teaching using your built-in knowledge, but explicitly note that this is general knowledge (not verified against current official docs) and recommend re-running after Context7 is set up for verified accuracy.
+5. **Cross-reference**: When generating knowledge maps, explanations, or code examples, always verify:
    - Terminology matches official documentation
    - Code examples follow official patterns and conventions
    - API usage is accurate per the official docs
    - If your explanation conflicts with the official docs, **defer to the official docs**
+
+> Context7 setup: \`npx ctx7 setup\`
+> Context7 docs: https://github.com/upstash/context7
 
 ---
 
@@ -214,7 +224,8 @@ Example:
 - **Knowledge map too large**: If the topic requires more than 30 concepts, prompt the user "This is a very broad topic. I'd suggest breaking it into smaller sub-topics. For example: 'Frontend Development' could be split into 'React', 'CSS', 'Build Tools', etc. Would you like to split it, or continue anyway?"`;
 
 const COMMAND_NAME = 'Learn: Topic';
-const COMMAND_DESCRIPTION = 'Initialize or load a learning topic — view knowledge map, track progress, choose your path';
+const COMMAND_DESCRIPTION =
+  'Initialize or load a learning topic — view knowledge map, track progress, choose your path';
 
 const COMMAND_CONTENT = `Use the learn-anything-topic skill to handle the user's /learn <topic-name> request.
 Follow the workflow defined in the skill:

@@ -2,7 +2,7 @@ import type { CommandContent, GeneratedCommand, ToolCommandAdapter } from './typ
 
 export function generateCommand(
   content: CommandContent,
-  adapter: ToolCommandAdapter
+  adapter: ToolCommandAdapter,
 ): GeneratedCommand {
   return {
     path: adapter.getFilePath(content.id),
@@ -12,7 +12,7 @@ export function generateCommand(
 
 export function generateCommands(
   contents: CommandContent[],
-  adapter: ToolCommandAdapter
+  adapter: ToolCommandAdapter,
 ): GeneratedCommand[] {
   return contents.map((content) => generateCommand(content, adapter));
 }

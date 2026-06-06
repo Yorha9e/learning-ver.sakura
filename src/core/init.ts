@@ -7,10 +7,7 @@ import ora from 'ora';
 import { FileSystemUtils } from '../utils/file-system.js';
 import { AI_TOOLS, AIToolOption, LEARN_DIR, DEFAULT_DOC_URLS } from './config.js';
 import { isInteractive } from '../utils/interactive.js';
-import {
-  generateCommands,
-  CommandAdapterRegistry,
-} from './command-generation/index.js';
+import { generateCommands, CommandAdapterRegistry } from './command-generation/index.js';
 import {
   getSkillTemplates,
   getCommandContents,
@@ -70,11 +67,20 @@ export class InitCommand {
     const sakura = chalk.hex('#FFB7C5');
     const pink = chalk.hex('#FF6B9D');
 
-    console.log(boxen(
-      pink.bold('⛩️  Learn Anything') + chalk.dim(`  v${VERSION}`) + '\n' +
-      chalk.dim(this.isGlobal ? 'Global Installation' : 'AI-Powered Recursive Learning System'),
-      { padding: 1, margin: { top: 0, bottom: 0, left: 2, right: 2 }, borderStyle: 'round', borderColor: '#FF6B9D' }
-    ));
+    console.log(
+      boxen(
+        pink.bold('⛩️  Learn Anything') +
+          chalk.dim(`  v${VERSION}`) +
+          '\n' +
+          chalk.dim(this.isGlobal ? 'Global Installation' : 'AI-Powered Recursive Learning System'),
+        {
+          padding: 1,
+          margin: { top: 0, bottom: 0, left: 2, right: 2 },
+          borderStyle: 'round',
+          borderColor: '#FF6B9D',
+        },
+      ),
+    );
     console.log('');
 
     // Detect available tools
@@ -90,9 +96,7 @@ export class InitCommand {
       const toolIds = this.toolsArg.split(',').map((t) => t.trim());
       selectedTools = availableTools.filter((t) => toolIds.includes(t.value));
     } else if (this.isUpdate || !isInteractive()) {
-      selectedTools = availableTools.filter(
-        (t) => t.available && this.hasToolDir(basePath, t)
-      );
+      selectedTools = availableTools.filter((t) => t.available && this.hasToolDir(basePath, t));
     } else {
       selectedTools = await this.interactiveSelect(availableTools);
     }
@@ -100,9 +104,14 @@ export class InitCommand {
     if (selectedTools.length === 0) {
       console.log(chalk.yellow(m.init.noToolsSelected));
       console.log(
-        chalk.dim(m.init.availableTools(
-          availableTools.filter((t) => t.available).map((t) => t.value).join(', ')
-        ))
+        chalk.dim(
+          m.init.availableTools(
+            availableTools
+              .filter((t) => t.available)
+              .map((t) => t.value)
+              .join(', '),
+          ),
+        ),
       );
       return;
     }
@@ -113,8 +122,17 @@ export class InitCommand {
     console.log('');
 
     // Generate skill files for each tool
-    const spinner2 = ora({ text: sakura('🌸') + ' Generating skills...', spinner: 'dots', color: 'magenta' }).start();
-    const toolResults: { name: string; skillsDir: string; skillCount: number; commandCount: number }[] = [];
+    const spinner2 = ora({
+      text: sakura('🌸') + ' Generating skills...',
+      spinner: 'dots',
+      color: 'magenta',
+    }).start();
+    const toolResults: {
+      name: string;
+      skillsDir: string;
+      skillCount: number;
+      commandCount: number;
+    }[] = [];
 
     for (const tool of selectedTools) {
       if (!tool.skillsDir) continue;
@@ -128,44 +146,78 @@ export class InitCommand {
     // Tool results
     for (const result of toolResults) {
       console.log(pink('  ⛩️ ') + pink.bold(result.name));
-      console.log(sakura('     ├─ ') + chalk.dim(`${result.skillCount} skills    → ${result.skillsDir}/skills/`));
-      console.log(sakura('     └─ ') + chalk.dim(`${result.commandCount} commands  → ${result.skillsDir}/commands/learn/`));
+      console.log(
+        sakura('     ├─ ') +
+          chalk.dim(`${result.skillCount} skills    → ${result.skillsDir}/skills/`),
+      );
+      console.log(
+        sakura('     └─ ') +
+          chalk.dim(`${result.commandCount} commands  → ${result.skillsDir}/commands/learn/`),
+      );
     }
     console.log('');
 
     // Summary
     const summaryLines: string[] = [];
     if (this.isGlobal) {
-      summaryLines.push(sakura('  🌸 ') + chalk.bold('Global install') + chalk.dim(` → ${basePath}`));
+      summaryLines.push(
+        sakura('  🌸 ') + chalk.bold('Global install') + chalk.dim(` → ${basePath}`),
+      );
     }
-    summaryLines.push(sakura('  🌸 ') + chalk.bold('Learning data') + chalk.dim(` → ${LEARN_DIR}/`));
+    summaryLines.push(
+      sakura('  🌸 ') + chalk.bold('Learning data') + chalk.dim(` → ${LEARN_DIR}/`),
+    );
     summaryLines.push(sakura('  📚 ') + chalk.bold('Doc storage') + chalk.dim(` → ${storagePath}`));
     for (const result of toolResults) {
-      summaryLines.push(pink('  ⛩️ ') + chalk.bold(result.name) + chalk.dim(` → ${result.skillsDir}/`));
+      summaryLines.push(
+        pink('  ⛩️ ') + chalk.bold(result.name) + chalk.dim(` → ${result.skillsDir}/`),
+      );
     }
     summaryLines.push('');
     summaryLines.push(pink('  🌸 ') + pink.bold('Ready!') + chalk.dim('  Try these commands:'));
     summaryLines.push('');
-    summaryLines.push(chalk.cyan('     /learn:topic') + chalk.dim(' <topic-name>') + chalk.dim('      — Initialize a learning topic'));
-    summaryLines.push(chalk.cyan('     /learn:explain') + chalk.dim(' <concept>') + chalk.dim('      — Deep-dive into a concept'));
-    summaryLines.push(chalk.cyan('     /learn:practice') + chalk.dim(' <concept>') + chalk.dim('     — TDD-style exercises'));
-    summaryLines.push(chalk.cyan('     /learn:review') + chalk.dim(' [topic]') + chalk.dim('        — Review progress'));
-    summaryLines.push(chalk.cyan('     /learn:status') + chalk.dim(' [topic]') + chalk.dim('        — Visualize knowledge map'));
+    summaryLines.push(
+      chalk.cyan('     /learn:topic') +
+        chalk.dim(' <topic-name>') +
+        chalk.dim('      — Initialize a learning topic'),
+    );
+    summaryLines.push(
+      chalk.cyan('     /learn:explain') +
+        chalk.dim(' <concept>') +
+        chalk.dim('      — Deep-dive into a concept'),
+    );
+    summaryLines.push(
+      chalk.cyan('     /learn:practice') +
+        chalk.dim(' <concept>') +
+        chalk.dim('     — TDD-style exercises'),
+    );
+    summaryLines.push(
+      chalk.cyan('     /learn:review') +
+        chalk.dim(' [topic]') +
+        chalk.dim('        — Review progress'),
+    );
+    summaryLines.push(
+      chalk.cyan('     /learn:status') +
+        chalk.dim(' [topic]') +
+        chalk.dim('        — Visualize knowledge map'),
+    );
     summaryLines.push('');
     summaryLines.push(sakura('  🌸') + chalk.dim('  Happy learning! ') + sakura('🌸'));
 
-    console.log(boxen(summaryLines.join('\n'), {
-      padding: { top: 0, bottom: 0, left: 1, right: 1 },
-      margin: { top: 0, bottom: 0, left: 2, right: 2 },
-      borderStyle: 'round',
-      borderColor: '#FF6B9D',
-      title: sakura('🌸') + pink.bold(' Summary ') + sakura('🌸'),
-      titleAlignment: 'center',
-    }));
+    console.log(
+      boxen(summaryLines.join('\n'), {
+        padding: { top: 0, bottom: 0, left: 1, right: 1 },
+        margin: { top: 0, bottom: 0, left: 2, right: 2 },
+        borderStyle: 'round',
+        borderColor: '#FF6B9D',
+        title: sakura('🌸') + pink.bold(' Summary ') + sakura('🌸'),
+        titleAlignment: 'center',
+      }),
+    );
     console.log('');
   }
 
-  private async detectTools(resolvedPath: string): Promise<AIToolOption[]> {
+  private async detectTools(_resolvedPath: string): Promise<AIToolOption[]> {
     return AI_TOOLS;
   }
 
@@ -181,12 +233,10 @@ export class InitCommand {
 
   private async interactiveSelect(tools: AIToolOption[]): Promise<AIToolOption[]> {
     const availableTools = tools.filter((t) => t.available && t.skillsDir);
-    const { search, checkbox } = await import('@inquirer/prompts');
+    const { checkbox } = await import('@inquirer/prompts');
 
     // Auto-detect existing tool dirs and pre-select them
-    const detected = availableTools.filter((t) =>
-      this.hasToolDir(process.cwd(), t)
-    );
+    const detected = availableTools.filter((t) => this.hasToolDir(process.cwd(), t));
     const detectedValues = new Set(detected.map((t) => t.value));
 
     const choices = availableTools.map((t) => ({
@@ -207,19 +257,14 @@ export class InitCommand {
   private async generateSkillsForTool(
     resolvedPath: string,
     tool: AIToolOption,
-    storagePath: string
+    storagePath: string,
   ): Promise<number> {
     const skillTemplates = getSkillTemplates();
     const docUrlsSection = buildDocUrlsSection(DEFAULT_DOC_URLS);
     const docsPathSection = buildDocsPathSection(storagePath);
 
     for (const entry of skillTemplates) {
-      const skillDir = path.join(
-        resolvedPath,
-        tool.skillsDir!,
-        'skills',
-        entry.dirName
-      );
+      const skillDir = path.join(resolvedPath, tool.skillsDir!, 'skills', entry.dirName);
       const skillFile = path.join(skillDir, 'SKILL.md');
       const content = generateSkillContent(entry.template, VERSION, (instructions) => {
         return instructions
@@ -231,10 +276,7 @@ export class InitCommand {
     return skillTemplates.length;
   }
 
-  private async generateCommandsForTool(
-    resolvedPath: string,
-    tool: AIToolOption
-  ): Promise<number> {
+  private async generateCommandsForTool(resolvedPath: string, tool: AIToolOption): Promise<number> {
     const adapter = CommandAdapterRegistry.get(tool.value);
     if (!adapter) return 0;
 
@@ -247,5 +289,4 @@ export class InitCommand {
     }
     return generatedCommands.length;
   }
-
 }

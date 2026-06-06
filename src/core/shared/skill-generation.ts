@@ -27,11 +27,31 @@ export interface CommandTemplateEntry {
 
 export function getSkillTemplates(): SkillTemplateEntry[] {
   return [
-    { template: getLearnTopicSkillTemplate(), dirName: 'learn-anything-topic', workflowId: 'topic' },
-    { template: getLearnExplainSkillTemplate(), dirName: 'learn-anything-explain', workflowId: 'explain' },
-    { template: getLearnPracticeSkillTemplate(), dirName: 'learn-anything-practice', workflowId: 'practice' },
-    { template: getLearnReviewSkillTemplate(), dirName: 'learn-anything-review', workflowId: 'review' },
-    { template: getLearnStatusSkillTemplate(), dirName: 'learn-anything-status', workflowId: 'status' },
+    {
+      template: getLearnTopicSkillTemplate(),
+      dirName: 'learn-anything-topic',
+      workflowId: 'topic',
+    },
+    {
+      template: getLearnExplainSkillTemplate(),
+      dirName: 'learn-anything-explain',
+      workflowId: 'explain',
+    },
+    {
+      template: getLearnPracticeSkillTemplate(),
+      dirName: 'learn-anything-practice',
+      workflowId: 'practice',
+    },
+    {
+      template: getLearnReviewSkillTemplate(),
+      dirName: 'learn-anything-review',
+      workflowId: 'review',
+    },
+    {
+      template: getLearnStatusSkillTemplate(),
+      dirName: 'learn-anything-status',
+      workflowId: 'status',
+    },
   ];
 }
 
@@ -66,9 +86,7 @@ export function buildDocUrlsSection(urls: Record<string, DocUrlEntry>): string {
   if (entries.length === 0) {
     return '_(No mandatory documentation configured.)_';
   }
-  return entries
-    .map(([, entry]) => `- **${entry.name}**: ${entry.toc}`)
-    .join('\n');
+  return entries.map(([, entry]) => `- **${entry.name}**: ${entry.toc}`).join('\n');
 }
 
 /**
@@ -81,7 +99,7 @@ export function buildDocsPathSection(storagePath: string): string {
 export function generateSkillContent(
   template: SkillTemplate,
   generatedByVersion: string,
-  transformInstructions?: (instructions: string) => string
+  transformInstructions?: (instructions: string) => string,
 ): string {
   const instructions = transformInstructions
     ? transformInstructions(template.instructions)

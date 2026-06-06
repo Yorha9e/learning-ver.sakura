@@ -12,11 +12,7 @@ export function getMessages(locale: SupportedLocale): LocaleMessages {
 }
 
 export function detectSystemLocale(): SupportedLocale {
-  const langEnv =
-    process.env.LANG ||
-    process.env.LC_ALL ||
-    process.env.LANGUAGE ||
-    '';
+  const langEnv = process.env.LANG || process.env.LC_ALL || process.env.LANGUAGE || '';
 
   if (/^zh[_-]/i.test(langEnv)) {
     return 'zh-CN';

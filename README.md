@@ -33,15 +33,15 @@ learning-sakura init
 
 When you run `init`, the tool scans your project and detects:
 
-| What | How |
-|------|-----|
-| **Language** | TypeScript, JavaScript, etc. from `package.json` |
-| **Framework** | React, Next.js, Vue, Express, Fastify, etc. |
-| **Testing** | Vitest, Jest, Playwright, Cypress, etc. |
-| **Build Tools** | Vite, Webpack, esbuild, tsup, etc. |
-| **Project Type** | Web App, CLI, Library, API, Monorepo |
-| **Code Style** | Indent, quotes, semicolons, naming convention, module system |
-| **Key Libraries** | Tailwind, Prisma, database drivers, styling tools |
+| What              | How                                                          |
+| ----------------- | ------------------------------------------------------------ |
+| **Language**      | TypeScript, JavaScript, etc. from `package.json`             |
+| **Framework**     | React, Next.js, Vue, Express, Fastify, etc.                  |
+| **Testing**       | Vitest, Jest, Playwright, Cypress, etc.                      |
+| **Build Tools**   | Vite, Webpack, esbuild, tsup, etc.                           |
+| **Project Type**  | Web App, CLI, Library, API, Monorepo                         |
+| **Code Style**    | Indent, quotes, semicolons, naming convention, module system |
+| **Key Libraries** | Tailwind, Prisma, database drivers, styling tools            |
 
 The detected info is injected into every skill file:
 
@@ -74,13 +74,13 @@ When suggesting practice exercises, align with this project's patterns.
 
 After init, your AI assistant gains five learning commands:
 
-| Command | What it does |
-|---------|-------------|
-| `/learn:topic <topic-name>` | Initialize a topic, generate a knowledge map, track progress |
-| `/learn:explain <concept-name>` | Recursive Socratic deep-dive into a concept |
-| `/learn:practice <concept-name>` | TDD-style coding exercises with Socratic feedback |
-| `/learn:review [topic-name]` | Review progress, spaced repetition recommendations |
-| `/learn:status [topic-name]` | Visualize learning state as a knowledge map heatmap |
+| Command                          | What it does                                                 |
+| -------------------------------- | ------------------------------------------------------------ |
+| `/learn:topic <topic-name>`      | Initialize a topic, generate a knowledge map, track progress |
+| `/learn:explain <concept-name>`  | Recursive Socratic deep-dive into a concept                  |
+| `/learn:practice <concept-name>` | TDD-style coding exercises with Socratic feedback            |
+| `/learn:review [topic-name]`     | Review progress, spaced repetition recommendations           |
+| `/learn:status [topic-name]`     | Visualize learning state as a knowledge map heatmap          |
 
 ### `/learn:topic` — Initialize a Topic
 

@@ -8,9 +8,7 @@ import { isInteractive } from '../utils/interactive.js';
  *
  * In non-interactive mode, returns ".learn/docs".
  */
-export async function promptDocStoragePath(
-  locale: SupportedLocale
-): Promise<string> {
+export async function promptDocStoragePath(locale: SupportedLocale): Promise<string> {
   const m = getMessages(locale).docSelection;
 
   if (!isInteractive()) {

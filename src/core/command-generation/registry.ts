@@ -1,10 +1,5 @@
 import type { ToolCommandAdapter } from './types.js';
-import {
-  claudeAdapter,
-  cursorAdapter,
-  codexAdapter,
-  geminiAdapter,
-} from './adapters/index.js';
+import { claudeAdapter, cursorAdapter, codexAdapter, geminiAdapter } from './adapters/index.js';
 
 export class CommandAdapterRegistry {
   private static adapters: Map<string, ToolCommandAdapter> = new Map();

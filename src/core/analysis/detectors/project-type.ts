@@ -7,24 +7,51 @@ interface ProjectTypeHints {
 }
 
 const CLI_DEPS = [
-  'commander', 'yargs', 'meow', 'oclif', 'clipanion', 'caporal',
-  'inquirer', '@inquirer/prompts', 'prompts', 'ora', 'chalk', 'picocolors',
-  'boxen', 'listr', 'ink', 'blessed',
+  'commander',
+  'yargs',
+  'meow',
+  'oclif',
+  'clipanion',
+  'caporal',
+  'inquirer',
+  '@inquirer/prompts',
+  'prompts',
+  'ora',
+  'chalk',
+  'picocolors',
+  'boxen',
+  'listr',
+  'ink',
+  'blessed',
 ];
 
 const API_DEPS = [
-  'express', 'fastify', 'koa', 'hono', 'hapi',
-  '@nestjs/core', '@trpc/server', 'graphql', 'apollo-server',
-  'graphql-yoga', 'elysia', 'nitro',
+  'express',
+  'fastify',
+  'koa',
+  'hono',
+  'hapi',
+  '@nestjs/core',
+  '@trpc/server',
+  'graphql',
+  'apollo-server',
+  'graphql-yoga',
+  'elysia',
+  'nitro',
 ];
 
-const LIBRARY_DEPS = [
-  'rollup', 'tsup', 'unbuild', '@rollup/plugin-typescript',
-];
+const LIBRARY_DEPS = ['rollup', 'tsup', 'unbuild', '@rollup/plugin-typescript'];
 
 const WEB_APP_FRAMEWORKS = [
-  'next', 'nuxt', 'gatsby', 'remix', 'astro', 'sveltekit',
-  '@sveltejs/kit', '@angular/core', 'vitepress',
+  'next',
+  'nuxt',
+  'gatsby',
+  'remix',
+  'astro',
+  'sveltekit',
+  '@sveltejs/kit',
+  '@angular/core',
+  'vitepress',
 ];
 
 export function detectProjectType(hints: ProjectTypeHints): ProjectType {
@@ -41,7 +68,10 @@ export function detectProjectType(hints: ProjectTypeHints): ProjectType {
   // CLI: has commander/yargs/etc + bin script
   const hasCliDep = CLI_DEPS.some((d) => depNames.has(d));
   const hasBinScript = !!(scripts.build && scripts.start) || !!scripts.prepublishOnly;
-  if (hasCliDep && (hasBinScript || scripts.dev?.includes('tsx') || scripts.dev?.includes('node'))) {
+  if (
+    hasCliDep &&
+    (hasBinScript || scripts.dev?.includes('tsx') || scripts.dev?.includes('node'))
+  ) {
     return 'cli';
   }
 

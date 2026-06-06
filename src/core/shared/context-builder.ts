@@ -2,11 +2,11 @@ import type { ProjectProfile } from '../analysis/types.js';
 
 const PROJECT_TYPE_LABELS: Record<string, string> = {
   'web-app': 'Web Application',
-  'cli': 'CLI Tool',
-  'library': 'Library / Package',
-  'api': 'API / Backend Service',
-  'monorepo': 'Monorepo',
-  'unknown': 'Unknown',
+  cli: 'CLI Tool',
+  library: 'Library / Package',
+  api: 'API / Backend Service',
+  monorepo: 'Monorepo',
+  unknown: 'Unknown',
 };
 
 /**
@@ -24,7 +24,8 @@ export function buildProjectContext(profile: ProjectProfile): string {
     if (profile.techStack.language) lines.push(`- **Language**: ${profile.techStack.language}`);
     if (profile.techStack.framework) lines.push(`- **Framework**: ${profile.techStack.framework}`);
     if (profile.techStack.runtime) lines.push(`- **Runtime**: ${profile.techStack.runtime}`);
-    if (profile.techStack.packageManager) lines.push(`- **Package Manager**: ${profile.techStack.packageManager}`);
+    if (profile.techStack.packageManager)
+      lines.push(`- **Package Manager**: ${profile.techStack.packageManager}`);
   }
 
   // Project type
@@ -47,7 +48,7 @@ export function buildProjectContext(profile: ProjectProfile): string {
 
   // Key dependencies (only framework/testing/database/styling, not all deps)
   const keyDeps = profile.dependencies.filter(
-    (d) => ['framework', 'database', 'styling'].includes(d.category) && d.type === 'dependency'
+    (d) => ['framework', 'database', 'styling'].includes(d.category) && d.type === 'dependency',
   );
   if (keyDeps.length > 0) {
     lines.push(`- **Key Libraries**: ${keyDeps.map((d) => d.name).join(', ')}`);
@@ -57,9 +58,14 @@ export function buildProjectContext(profile: ProjectProfile): string {
   const styleItems: string[] = [];
   if (profile.codeStyle.moduleSystem) styleItems.push(profile.codeStyle.moduleSystem.toUpperCase());
   if (profile.codeStyle.quotes) styleItems.push(`${profile.codeStyle.quotes} quotes`);
-  if (profile.codeStyle.indent) styleItems.push(`${profile.codeStyle.indentSize ?? 2}-${profile.codeStyle.indent === 'tabs' ? 'tab' : 'space'} indent`);
-  if (profile.codeStyle.semicolons !== null) styleItems.push(profile.codeStyle.semicolons ? 'semicolons' : 'no semicolons');
-  if (profile.codeStyle.namingConvention) styleItems.push(`${profile.codeStyle.namingConvention} naming`);
+  if (profile.codeStyle.indent)
+    styleItems.push(
+      `${profile.codeStyle.indentSize ?? 2}-${profile.codeStyle.indent === 'tabs' ? 'tab' : 'space'} indent`,
+    );
+  if (profile.codeStyle.semicolons !== null)
+    styleItems.push(profile.codeStyle.semicolons ? 'semicolons' : 'no semicolons');
+  if (profile.codeStyle.namingConvention)
+    styleItems.push(`${profile.codeStyle.namingConvention} naming`);
   if (styleItems.length > 0) {
     lines.push(`- **Code Style**: ${styleItems.join(', ')}`);
   }
@@ -67,7 +73,9 @@ export function buildProjectContext(profile: ProjectProfile): string {
   // Guidance for AI
   lines.push('');
   lines.push('When generating code examples, use the above tech stack and code style.');
-  lines.push('When suggesting practice exercises, align with this project\'s patterns and frameworks.');
+  lines.push(
+    "When suggesting practice exercises, align with this project's patterns and frameworks.",
+  );
 
   return lines.join('\n');
 }

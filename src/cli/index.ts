@@ -21,9 +21,7 @@ program
   .description('AI-powered recursive learning system with Socratic method and TDD practice')
   .version(version);
 
-const availableToolIds = AI_TOOLS.filter((tool) => tool.skillsDir).map(
-  (tool) => tool.value
-);
+const availableToolIds = AI_TOOLS.filter((tool) => tool.skillsDir).map((tool) => tool.value);
 
 program
   .command('init [path]')
@@ -32,41 +30,46 @@ program
   .option('--force', m.cli.forceOption)
   .option('--lang <locale>', m.cli.langOption)
   .option('--local', 'Install skills locally (in project directory)')
-  .action(async (targetPath = '.', options?: { tools?: string; force?: boolean; lang?: string; local?: boolean }) => {
-    const cliLocale = resolveLocale(options?.lang);
-    const mc = cliLocale !== earlyLocale ? getMessages(cliLocale).cli : m.cli;
-    try {
-      const resolvedPath = path.resolve(targetPath);
-
+  .action(
+    async (
+      targetPath = '.',
+      options?: { tools?: string; force?: boolean; lang?: string; local?: boolean },
+    ) => {
+      const cliLocale = resolveLocale(options?.lang);
+      const mc = cliLocale !== earlyLocale ? getMessages(cliLocale).cli : m.cli;
       try {
-        const stats = await fs.stat(resolvedPath);
-        if (!stats.isDirectory()) {
-          throw new Error(mc.notDirectory(targetPath));
-        }
-      } catch (error: any) {
-        if (error.code === 'ENOENT') {
-          console.log(chalk.yellow(mc.dirNotExist(targetPath)));
-        } else if (error.message && error.message.includes('not a directory')) {
-          throw error;
-        } else {
-          throw new Error(mc.cannotAccess(targetPath, error.message));
-        }
-      }
+        const resolvedPath = path.resolve(targetPath);
 
-      const { InitCommand } = await import('../core/init.js');
-      const initCommand = new InitCommand({
-        tools: options?.tools,
-        force: options?.force,
-        locale: cliLocale,
-        global: !options?.local,  // default global, --local to install in project
-      });
-      await initCommand.execute(targetPath);
-    } catch (error) {
-      console.log();
-      console.error(chalk.red(mc.errorPrefix((error as Error).message)));
-      process.exit(1);
-    }
-  });
+        try {
+          const stats = await fs.stat(resolvedPath);
+          if (!stats.isDirectory()) {
+            throw new Error(mc.notDirectory(targetPath));
+          }
+        } catch (error: any) {
+          if (error.code === 'ENOENT') {
+            console.log(chalk.yellow(mc.dirNotExist(targetPath)));
+          } else if (error.message && error.message.includes('not a directory')) {
+            throw error;
+          } else {
+            throw new Error(mc.cannotAccess(targetPath, error.message), { cause: error });
+          }
+        }
+
+        const { InitCommand } = await import('../core/init.js');
+        const initCommand = new InitCommand({
+          tools: options?.tools,
+          force: options?.force,
+          locale: cliLocale,
+          global: !options?.local, // default global, --local to install in project
+        });
+        await initCommand.execute(targetPath);
+      } catch (error) {
+        console.log();
+        console.error(chalk.red(mc.errorPrefix((error as Error).message)));
+        process.exit(1);
+      }
+    },
+  );
 
 program
   .command('update [path]')

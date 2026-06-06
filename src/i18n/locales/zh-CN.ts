@@ -2,7 +2,8 @@ import type { LocaleMessages } from '../types.js';
 
 export const zhCN: LocaleMessages = {
   cli: {
-    programDescription: 'AI-powered recursive learning system with Socratic method and TDD practice',
+    programDescription:
+      'AI-powered recursive learning system with Socratic method and TDD practice',
     initCommandDescription: '在当前项目初始化 Learn Anything 学习技能',
     updateCommandDescription: '更新 Learn Anything 技能文件到最新版本',
     toolsOptionDescription: (ids: string) =>

@@ -1,9 +1,15 @@
-import type { ProjectProfile, TechStackInfo, DependencyInfo, CodeStyleInfo, TestingInfo } from './types.js';
+import type { ProjectProfile, TechStackInfo, DependencyInfo, TestingInfo } from './types.js';
 import { detectFromPackageJson } from './detectors/package-json.js';
 import { detectCodeStyle } from './detectors/code-style.js';
 import { detectProjectType } from './detectors/project-type.js';
 
-export type { ProjectProfile, TechStackInfo, DependencyInfo, CodeStyleInfo, TestingInfo } from './types.js';
+export type {
+  ProjectProfile,
+  TechStackInfo,
+  DependencyInfo,
+  CodeStyleInfo,
+  TestingInfo,
+} from './types.js';
 
 export async function analyzeProject(rootPath: string): Promise<ProjectProfile> {
   const [pkgResult, codeStyle] = await Promise.all([

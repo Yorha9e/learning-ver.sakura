@@ -1,10 +1,14 @@
 import type { SkillTemplate, CommandTemplate } from '../types.js';
 
 const SKILL_NAME = 'learn-anything-practice';
-const SKILL_DESCRIPTION = 'Master concepts through hands-on practice. Coding topics get real project files to edit in your IDE; conceptual topics get chat-based discussion. Dual-mode: Project Mode + Chat Mode.';
+const SKILL_DESCRIPTION =
+  'Master concepts through hands-on practice. Coding topics get real project files to edit in your IDE; conceptual topics get chat-based discussion. Dual-mode: Project Mode + Chat Mode.';
 
 const INSTRUCTIONS = `Always respond in the same language the user uses.
 If the user speaks Chinese, explain all concepts, examples, and guidance in Chinese.
+
+> 🔧 **Context7 MCP Required for Verified Docs**
+> This skill uses Context7 MCP to fetch official documentation. If you haven't set it up yet, run \`npx ctx7 setup\` (or visit https://github.com/upstash/context7 for manual setup). If Context7 is unavailable, this skill will fall back to general knowledge with an accuracy warning.
 
 ---
 
@@ -49,13 +53,21 @@ Before creating exercises, scan the project:
 
 1. **Check local cache**: Check if \`{{DOCS_PATH}}/<language>/summary.md\` exists
 2. **If cached** → Read it. Use as ground truth.
-3. **If NOT cached** → Use WebFetch to download the relevant documentation URL above.
-   - Fetch and extract key sections relevant to the exercise
-   - Write summary to \`{{DOCS_PATH}}/<language>/summary.md\`
-4. **Cross-reference your exercise**:
+3. **If NOT cached** → Use Context7 MCP's \`get-library-docs\` tool to fetch official documentation:
+   - Pass the library ID for the topic (e.g., \`/mdn/content\` for JavaScript, \`/reactjs/react.dev\` for React)
+   - Optionally pass a \`topic\` parameter to focus on the concept (e.g., \`topic: "closures"\`)
+   - Write a comprehensive summary to \`{{DOCS_PATH}}/<language>/summary.md\`
+   - Include: key concepts, API references, code examples, best practices, gotchas
+4. **If Context7 MCP is NOT available** (tool not found in your available tools):
+   - 🔧 **Tell the user**: "Context7 MCP is not configured. To enable verified documentation, please run: \`npx ctx7 setup\`"
+   - Proceed with exercise creation using your built-in knowledge, but explicitly note that this is general knowledge (not verified against current official docs) and recommend re-running after Context7 is set up for verified accuracy.
+5. **Cross-reference your exercise**:
    - Exercise requirements must use official APIs and patterns
    - Starter code must follow official conventions
    - Solution references must be accurate per official docs
+
+> Context7 setup: \`npx ctx7 setup\`
+> Context7 docs: https://github.com/upstash/context7
 
 ---
 
@@ -350,9 +362,11 @@ The user submits their code or answer in the chat. Review it using the framework
    - Set status to needs_practice
    - Note specific areas to focus on
 
-**In the same turn as your feedback**, save the session record. ⚠️ Do NOT wait for the user's next message — feedback text and file writes must happen together.
+⚠️ CRITICAL — Write the session file FIRST, then echo its content to the conversation. This ensures zero drift between what the user sees and what gets saved.
 
-- Use the Write tool to create \`./.learn/topics/<topic-name>/sessions/<concept-name>-practice-YYYY-MM-DD.md\` — match the user's language (see Step 5 for naming rules and format)
+1. **Write the session file** — Use the Write tool to create \`./.learn/topics/<topic-name>/sessions/<concept-name>-practice-YYYY-MM-DD.md\` with the full feedback content (see Step 5 for naming rules and format). Include everything: your acknowledgment, Socratic follow-up questions, edge case discussion, code quality tips, and final assessment.
+
+2. **Output the file content to the conversation** — After writing, present the exact content of the file you just wrote as your conversation response. Do NOT rephrase or regenerate it — copy the file content verbatim into your message.
 
 ### Step 5: Practice Session Record Format
 
@@ -408,7 +422,8 @@ Note: State.yaml updates are handled in Step 4's assessment (use the Edit tool t
 - **User explicitly requests a specific mode**: Respect the user's choice, even if it contradicts the auto-detection. "Sure! Let's do this as a coding exercise / chat discussion."`;
 
 const COMMAND_NAME = 'Learn: Practice';
-const COMMAND_DESCRIPTION = 'Hands-on practice — Project Mode creates real code files for your IDE, Chat Mode for conceptual discussion';
+const COMMAND_DESCRIPTION =
+  'Hands-on practice — Project Mode creates real code files for your IDE, Chat Mode for conceptual discussion';
 
 const COMMAND_CONTENT = `Use the learn-anything-practice skill to handle the user's /learn-practice <concept-name> request.
 Follow the workflow defined in the skill:
@@ -417,8 +432,8 @@ Follow the workflow defined in the skill:
 2. Assess difficulty level based on state.yaml (beginner/intermediate/challenge)
 3. Project Mode: use Bash to create exercise dir → use Write to create README.md + starter file → tell user to open in IDE
    Chat Mode: generate exercise in chat (background → requirements → code template → hint)
-4. Project Mode: use Read to review user's code file → optionally use Bash to run it → provide structured feedback, and in the same turn use Write to save session record + Edit to update state.yaml
-   Chat Mode: review code submitted in chat → provide structured feedback, and in the same turn use Write to save session record + Edit to update state.yaml`;
+4. Project Mode: use Read to review user's code file → optionally use Bash to run it → compose feedback → Write session file FIRST → echo file content verbatim to conversation + Edit to update state.yaml
+   Chat Mode: review code submitted in chat → compose feedback → Write session file FIRST → echo file content verbatim to conversation + Edit to update state.yaml`;
 
 export function getLearnPracticeSkillTemplate(): SkillTemplate {
   return {

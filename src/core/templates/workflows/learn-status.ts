@@ -1,7 +1,8 @@
 import type { SkillTemplate, CommandTemplate } from '../types.js';
 
 const SKILL_NAME = 'learn-anything-status';
-const SKILL_DESCRIPTION = 'Visualize your current learning state. Display a knowledge map heatmap with mastery status for each concept.';
+const SKILL_DESCRIPTION =
+  'Visualize your current learning state. Display a knowledge map heatmap with mastery status for each concept.';
 
 const INSTRUCTIONS = `Always respond in the same language the user uses.
 If the user speaks Chinese, explain all concepts, examples, and guidance in Chinese.
@@ -89,7 +90,8 @@ Objects & Prototypes                  [0/4 mastered]
   > "You have the following learning topics: JavaScript (17%), Rust (0%). Please specify a topic name, e.g.: \`/learn-status javascript\`"`;
 
 const COMMAND_NAME = 'Learn: Status';
-const COMMAND_DESCRIPTION = 'Visualize learning state — knowledge map heatmap with mastery status per concept';
+const COMMAND_DESCRIPTION =
+  'Visualize learning state — knowledge map heatmap with mastery status per concept';
 
 const COMMAND_CONTENT = `Use the learn-anything-status skill to handle the user's /learn-status [topic-name] request.
 Follow the workflow defined in the skill:

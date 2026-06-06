@@ -114,9 +114,7 @@ describe('detectProjectType', () => {
   it('should detect library project', () => {
     const type = detectProjectType({
       hasWorkspaces: false,
-      dependencies: [
-        { name: 'tsup', version: '^8.0.0', type: 'devDependency', category: 'build' },
-      ],
+      dependencies: [{ name: 'tsup', version: '^8.0.0', type: 'devDependency', category: 'build' }],
       scripts: { prepublishOnly: 'npm run build' },
     });
     expect(type).toBe('library');

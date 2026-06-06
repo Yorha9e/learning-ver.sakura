@@ -13,90 +13,95 @@ interface PackageJson {
 }
 
 const FRAMEWORK_DEPS: Record<string, string> = {
-  'next': 'Next.js',
-  'nuxt': 'Nuxt',
-  'gatsby': 'Gatsby',
-  'remix': 'Remix',
-  'astro': 'Astro',
-  'sveltekit': 'SvelteKit',
+  next: 'Next.js',
+  nuxt: 'Nuxt',
+  gatsby: 'Gatsby',
+  remix: 'Remix',
+  astro: 'Astro',
+  sveltekit: 'SvelteKit',
   '@sveltejs/kit': 'SvelteKit',
-  'react': 'React',
-  'vue': 'Vue',
-  'svelte': 'Svelte',
-  'angular': 'Angular',
+  react: 'React',
+  vue: 'Vue',
+  svelte: 'Svelte',
+  angular: 'Angular',
   '@angular/core': 'Angular',
   'solid-js': 'Solid.js',
-  'preact': 'Preact',
-  'express': 'Express',
-  'fastify': 'Fastify',
-  'koa': 'Koa',
-  'hono': 'Hono',
-  'nestjs': 'NestJS',
+  preact: 'Preact',
+  express: 'Express',
+  fastify: 'Fastify',
+  koa: 'Koa',
+  hono: 'Hono',
+  nestjs: 'NestJS',
   '@nestjs/core': 'NestJS',
-  'electron': 'Electron',
+  electron: 'Electron',
   'tauri-apps': 'Tauri',
 };
 
 const TESTING_DEPS: Record<string, { framework: string; coverage?: string }> = {
-  'vitest': { framework: 'Vitest', coverage: 'c8' },
-  'jest': { framework: 'Jest', coverage: 'istanbul' },
-  'mocha': { framework: 'Mocha' },
-  'chai': { framework: 'Chai' },
+  vitest: { framework: 'Vitest', coverage: 'c8' },
+  jest: { framework: 'Jest', coverage: 'istanbul' },
+  mocha: { framework: 'Mocha' },
+  chai: { framework: 'Chai' },
   '@playwright/test': { framework: 'Playwright' },
-  'cypress': { framework: 'Cypress' },
-  'pytest': { framework: 'pytest' },
-  'unittest': { framework: 'unittest' },
-  'rspec': { framework: 'RSpec' },
-  'minitest': { framework: 'Minitest' },
+  cypress: { framework: 'Cypress' },
+  pytest: { framework: 'pytest' },
+  unittest: { framework: 'unittest' },
+  rspec: { framework: 'RSpec' },
+  minitest: { framework: 'Minitest' },
   '@testing-library/react': { framework: 'Testing Library (React)' },
   '@testing-library/vue': { framework: 'Testing Library (Vue)' },
   'happy-dom': { framework: 'happy-dom' },
-  'jsdom': { framework: 'jsdom' },
+  jsdom: { framework: 'jsdom' },
 };
 
 const BUILD_DEPS: Record<string, string> = {
-  'vite': 'Vite',
-  'webpack': 'Webpack',
-  'esbuild': 'esbuild',
-  'rollup': 'Rollup',
-  'parcel': 'Parcel',
-  'turbopack': 'Turbopack',
-  'tsup': 'tsup',
-  'unbuild': 'unbuild',
-  'swc': 'SWC',
+  vite: 'Vite',
+  webpack: 'Webpack',
+  esbuild: 'esbuild',
+  rollup: 'Rollup',
+  parcel: 'Parcel',
+  turbopack: 'Turbopack',
+  tsup: 'tsup',
+  unbuild: 'unbuild',
+  swc: 'SWC',
   '@swc/core': 'SWC',
-  'turbo': 'Turborepo',
+  turbo: 'Turborepo',
 };
 
 const LINTING_DEPS = [
-  'eslint', 'prettier', 'biome', 'oxlint', '@biomejs/biome',
-  'stylelint', 'commitlint',
+  'eslint',
+  'prettier',
+  'biome',
+  'oxlint',
+  '@biomejs/biome',
+  'stylelint',
+  'commitlint',
 ];
 
 const DATABASE_DEPS: Record<string, string> = {
-  'prisma': 'Prisma',
+  prisma: 'Prisma',
   '@prisma/client': 'Prisma',
   'drizzle-orm': 'Drizzle ORM',
-  'typeorm': 'TypeORM',
-  'sequelize': 'Sequelize',
-  'mongoose': 'Mongoose',
-  'knex': 'Knex',
-  'kysely': 'Kysely',
-  'pg': 'PostgreSQL',
-  'mysql2': 'MySQL',
+  typeorm: 'TypeORM',
+  sequelize: 'Sequelize',
+  mongoose: 'Mongoose',
+  knex: 'Knex',
+  kysely: 'Kysely',
+  pg: 'PostgreSQL',
+  mysql2: 'MySQL',
   'better-sqlite3': 'SQLite',
-  'sqlite3': 'SQLite',
-  'redis': 'Redis',
-  'ioredis': 'Redis',
+  sqlite3: 'SQLite',
+  redis: 'Redis',
+  ioredis: 'Redis',
 };
 
 const STYLING_DEPS: Record<string, string> = {
-  'tailwindcss': 'Tailwind CSS',
+  tailwindcss: 'Tailwind CSS',
   '@emotion/react': 'Emotion',
   'styled-components': 'styled-components',
-  'sass': 'Sass',
-  'less': 'Less',
-  'postcss': 'PostCSS',
+  sass: 'Sass',
+  less: 'Less',
+  postcss: 'PostCSS',
   'css-modules': 'CSS Modules',
 };
 
@@ -176,7 +181,8 @@ export async function detectFromPackageJson(rootPath: string): Promise<{
   }
 
   const isEsm = pkg.type === 'module';
-  const hasWorkspaces = Array.isArray(pkg.workspaces) ||
+  const hasWorkspaces =
+    Array.isArray(pkg.workspaces) ||
     !!(pkg.workspaces && typeof pkg.workspaces === 'object' && 'packages' in pkg.workspaces);
 
   // Build dependencies list
@@ -201,7 +207,8 @@ export async function detectFromPackageJson(rootPath: string): Promise<{
   // Detect testing setup
   let testFramework: string | null = null;
   let coverageTool: string | null = null;
-  const hasTestScript = !!pkg.scripts?.test && pkg.scripts.test !== 'echo "Error: no test specified" && exit 1';
+  const hasTestScript =
+    !!pkg.scripts?.test && pkg.scripts.test !== 'echo "Error: no test specified" && exit 1';
 
   for (const [dep, info] of Object.entries(TESTING_DEPS)) {
     if (allDeps[dep]) {

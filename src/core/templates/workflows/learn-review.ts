@@ -1,7 +1,8 @@
 import type { SkillTemplate, CommandTemplate } from '../types.js';
 
 const SKILL_NAME = 'learn-anything-review';
-const SKILL_DESCRIPTION = 'Review your learning progress. See mastered, weak, and unexplored concepts. Get personalized recommendations based on spaced repetition.';
+const SKILL_DESCRIPTION =
+  'Review your learning progress. See mastered, weak, and unexplored concepts. Get personalized recommendations based on spaced repetition.';
 
 const INSTRUCTIONS = `Always respond in the same language the user uses.
 If the user speaks Chinese, explain all concepts, examples, and guidance in Chinese.
@@ -142,7 +143,8 @@ Summarize across all topics:
 - **state.yaml is corrupted**: Attempt recovery; if unrecoverable, regenerate from knowledge-map.md.`;
 
 const COMMAND_NAME = 'Learn: Review';
-const COMMAND_DESCRIPTION = 'Review learning progress — discover weak spots, get personalized recommendations via spaced repetition';
+const COMMAND_DESCRIPTION =
+  'Review learning progress — discover weak spots, get personalized recommendations via spaced repetition';
 
 const COMMAND_CONTENT = `Use the learn-anything-review skill to handle the user's /learn-review [topic-name] request.
 Follow the workflow defined in the skill:

@@ -2,13 +2,15 @@ import type { LocaleMessages } from '../types.js';
 
 export const en: LocaleMessages = {
   cli: {
-    programDescription: 'AI-powered recursive learning system with Socratic method and TDD practice',
+    programDescription:
+      'AI-powered recursive learning system with Socratic method and TDD practice',
     initCommandDescription: 'Initialize Learn Anything learning skills in the current project',
     updateCommandDescription: 'Update Learn Anything skill files to latest version',
     toolsOptionDescription: (ids: string) =>
       `Specify AI tools (non-interactive mode). Use "all", "none", or comma-separated list: ${ids}`,
     notDirectory: (path: string) => `Path "${path}" is not a directory`,
-    dirNotExist: (path: string) => `Directory "${path}" does not exist, it will be created automatically.`,
+    dirNotExist: (path: string) =>
+      `Directory "${path}" does not exist, it will be created automatically.`,
     cannotAccess: (path: string, msg: string) => `Cannot access path "${path}": ${msg}`,
     errorPrefix: (msg: string) => `Error: ${msg}`,
     updateComplete: 'Learn Anything skill files have been updated.',
@@ -18,7 +20,8 @@ export const en: LocaleMessages = {
 
   init: {
     header: '\n🧠 Learn Anything — AI-Powered Recursive Learning System\n',
-    noToolsSelected: 'No AI tools selected. Use --tools option to specify, or select in interactive mode.',
+    noToolsSelected:
+      'No AI tools selected. Use --tools option to specify, or select in interactive mode.',
     availableTools: (tools: string) => `Available tools: ${tools}`,
     skillGenerated: (toolName: string) => `  ✓ ${toolName} — 5 skill files generated`,
     initComplete: '🎉 Learn Anything initialization complete!\n',
@@ -26,7 +29,8 @@ export const en: LocaleMessages = {
     startLearning: (example: string) => `  Run ${example} to start your first learning topic\n`,
     availableCommands: 'Available learning commands:',
     cmdLine: (cmd: string, desc: string) => `  ${cmd}${desc}`,
-    interactiveSelectPrompt: 'Select AI tools to generate skills for (space to select, enter to confirm):',
+    interactiveSelectPrompt:
+      'Select AI tools to generate skills for (space to select, enter to confirm):',
   },
 
   docSelection: {

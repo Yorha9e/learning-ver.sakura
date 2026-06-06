@@ -4,6 +4,8 @@
 
 Turn your AI coding assistant into an interactive tutor. The AI studies your project first, then teaches you anything — grounded in **official documentation** fetched via **Context7 MCP**.
 
+> 🌏 [中文](./README.md) | [English](./README.en.md) | [日本語](./README.ja.md)
+
 [![npm version](https://img.shields.io/npm/v/learning-ver.sakura?color=ff6b9d&style=flat-square)](https://www.npmjs.com/package/learning-ver.sakura)
 [![CI](https://img.shields.io/github/actions/workflow/status/yorha9e/learning-ver.sakura/ci.yml?branch=main&label=CI&style=flat-square)](https://github.com/yorha9e/learning-ver.sakura/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-ffb7c5?style=flat-square)](https://opensource.org/licenses/MIT)
@@ -22,7 +24,7 @@ Turn your AI coding assistant into an interactive tutor. The AI studies your pro
 | 💾 **Smart Cache**       | 本地缓存文档摘要，下次教学秒开                         |
 | 🔄 **Self-Healing**      | Context7 缺失时引导用户安装（`npx ctx7 setup`）        |
 | 🎯 **30+ AI Tools**      | Claude Code、Cursor、Gemini、Codex、Copilot、Windsurf… |
-| 🌏 **Bilingual**         | English / 简体中文                                     |
+| 🌏 **Trilingual**        | English / 简体中文 / 日本語                            |
 | ⚡ **5 Workflows**       | topic / explain / practice / review / status           |
 
 ---
@@ -48,6 +50,8 @@ learning-sakura init --lang zh-CN
 # 一次性运行
 npx learning-ver.sakura init --tools claude
 ```
+
+> 📖 文档：[English](./README.en.md) · [日本語](./README.ja.md)
 
 初始化完成后，AI 助手自动获得 5 个学习命令：
 
